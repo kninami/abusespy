@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}{{ platform.name }} — AbuseSpy{% endblock %}
+
+{% block content %}
+<div class="platform-hero" style="border-top: 4px solid {{ platform.color }}">
+  <div class="container platform-hero-inner">
+    <div class="platform-hero-left">
+      <span class="platform-emoji-lg">{{ platform.emoji }}</span>
+      <div>
+        <h1 class="platform-title">{{ platform.name }}</h1>
+        <p class="platform-desc">{{ platform.description }}</p>
+      </div>
+    </div>
+    <div class="platform-hero-right">
+      <div class="big-score" style="color: {{ score_color(platform.score) }}">
+        {{ platform.score }}<span class="big-score-denom">/10</span>
+      </div>
+      <div class="score-bar-wrap">
+        <div class="score-bar" style="width: {{ (platform.score / 10 * 100)|round }}%; background: {{ score_color(platform.score) }}"></div>
+      </div>
+      <p class="score-label">종합 점수</p>
+    </div>
+  </div>
+</div>
+
+<!-- 카테고리별 점수 요약 -->
+<div class="cat-summary-bar">
+  <div class="container cat-summary-inner">
+    {% for cat, cs in cat_scores.items() %}
+    <div class="cat-summary-item">
+      <span class="cat-summary-name">{{ cat }}</span>
+      <div class="cat-bar-wrap">
+        <div class="cat-bar" style="width: {{ (cs / 10 * 100)|round }}%; background: {{ score_color(cs) }}"></div>
+      </div>
+      <span class="cat-summary-score" style="color: {{ score_color(cs) }}">{{ cs }}/10</span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- 항목별 상세 -->
+<div class="rubric-section">
+  <div class="container">
+    {% for category in categories %}
+    <div class="category-block">
+      <h2 class="category-title">{{ category.name }}</h2>
+      {% for criterion, judgement in zip(category.criteria, category.judgements) %}
+      <div class="criterion-row {% if judgement.verdict == 'yes' %}verdict-yes{% elif judgement.verdict == 'unclear' %}verdict-unclear{% else %}verdict-no{% endif %}">
+        <div class="criterion-left">
+          <span class="criterion-id">{{ criterion.id }}</span>
+          <p class="criterion-q">{{ criterion.question }}</p>
+        </div>
+        <div class="criterion-right">
+          <span class="verdict-badge verdict-{{ judgement.verdict }}">
+            {% if judgement.verdict == 'yes' %}✓ Yes
+            {% elif judgement.verdict == 'unclear' %}~ Unclear
+            {% else %}✗ No
+            {% endif %}
+          </span>
+        </div>
+
+        {% if judgement.evidence_summary %}
+        <div class="criterion-evidence">
+          <p class="evidence-summary">{{ judgement.evidence_summary }}</p>
+          {% if judgement.evidence_quotes %}
+          <details class="evidence-quotes-wrap">
+            <summary>근거 인용 보기</summary>
+            <blockquote class="evidence-quote">{{ judgement.evidence_quotes }}</blockquote>
+          </details>
+          {% endif %}
+          {% if judgement.sources %}
+          <p class="evidence-sources">출처: <code>{{ judgement.sources }}</code></p>
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="back-link-wrap">
+  <div class="container">
+    <a href="{{ url_for('index') }}" class="back-link">← 전체 플랫폼 목록으로</a>
+  </div>
+</div>
+{% endblock %}

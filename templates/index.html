@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}AbuseSpy — 소셜 미디어 학대 정책 평가{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <h1>소셜 미디어 학대 정책 평가</h1>
+    <p class="hero-sub">
+      Instagram, X, Discord, Telegram의 피해자 보호·신고·집행·투명성 정책을
+      17개 기준으로 평가합니다.
+    </p>
+  </div>
+</section>
+
+<section class="platform-grid-section">
+  <div class="container">
+    <div class="platform-grid">
+      {% for card in cards %}
+      <a href="{{ url_for('platform', service=card.service) }}" class="platform-card" style="--accent: {{ card.color }}">
+        <div class="card-header">
+          <span class="platform-emoji">{{ card.emoji }}</span>
+          <div class="card-title-block">
+            <h2 class="card-name">{{ card.name }}</h2>
+            <p class="card-desc">{{ card.description }}</p>
+          </div>
+        </div>
+
+        <div class="score-block">
+          <span class="score-num" style="color: {{ score_color(card.score) }}">{{ card.score }}</span>
+          <span class="score-denom">/10</span>
+        </div>
+
+        <div class="score-bar-wrap">
+          <div class="score-bar" style="width: {{ (card.score / 10 * 100)|round }}%; background: {{ score_color(card.score) }}"></div>
+        </div>
+
+        <div class="cat-mini-grid">
+          {% for cat, cs in card.cat_scores.items() %}
+          <div class="cat-mini">
+            <span class="cat-mini-label">{{ cat.split('(')[0] }}</span>
+            <span class="cat-mini-score" style="color: {{ score_color(cs) }}">{{ cs }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="about-section" id="about">
+  <div class="container about-grid">
+    <div class="about-block">
+      <h3>평가 기준</h3>
+      <p>5개 영역 17개 항목으로 플랫폼 공개 정책을 검토합니다. 각 항목은 <strong>Yes(1점) / Unclear(0.5점) / No(0점)</strong>으로 판정합니다.</p>
+    </div>
+    <div class="about-block">
+      <h3>평가 영역</h3>
+      <ul>
+        <li>📣 신고(Reporting)</li>
+        <li>🛡 피해자보호(Victim)</li>
+        <li>📊 투명성(Transparency)</li>
+        <li>⚖️ 집행(Enforcement)</li>
+        <li>🚨 유해행위(Harm)</li>
+      </ul>
+    </div>
+    <div class="about-block">
+      <h3>점수 해석</h3>
+      <ul>
+        <li><span class="badge badge-good">8점 이상</span> 우수</li>
+        <li><span class="badge badge-mid">5–7.9점</span> 보통</li>
+        <li><span class="badge badge-bad">5점 미만</span> 미흡</li>
+      </ul>
+    </div>
+  </div>
+</section>
+{% endblock %}
