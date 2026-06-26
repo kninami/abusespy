@@ -5,7 +5,9 @@
 <div class="platform-hero" style="border-top: 4px solid {{ platform.color }}">
   <div class="container platform-hero-inner">
     <div class="platform-hero-left">
-      <span class="platform-emoji-lg">{{ platform.emoji }}</span>
+    <img src="{{ url_for('static', filename='images/' + platform.service + '.png') }}" 
+      alt="{{ platform.name }}" class="platform-logo-lg">
+      <!-- <span class="platform-emoji-lg">{{ platform.emoji }}</span> -->
       <div>
         <h1 class="platform-title">{{ platform.name }}</h1>
         <p class="platform-desc">{{ platform.description }}</p>

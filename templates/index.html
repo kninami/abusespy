@@ -18,7 +18,9 @@
       {% for card in cards %}
       <a href="{{ url_for('platform', service=card.service) }}" class="platform-card" style="--accent: {{ card.color }}">
         <div class="card-header">
-          <span class="platform-emoji">{{ card.emoji }}</span>
+          <img src=" {{ url_for('static', filename='images/' + card.service + '.png') }}"
+            alt="{{ card.name }}" class="platform-logo">
+          <!-- <span class="platform-emoji">{{ card.emoji }}</span> -->
           <div class="card-title-block">
             <h2 class="card-name">{{ card.name }}</h2>
             <p class="card-desc">{{ card.description }}</p>
