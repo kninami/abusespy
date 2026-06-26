@@ -71,7 +71,15 @@
           </details>
           {% endif %}
           {% if judgement.sources %}
-          <p class="evidence-sources">출처: <code>{{ judgement.sources }}</code></p>
+          <p class="evidence-sources">출처:
+            {% for src in judgement.sources.split('\n') %}
+              {% if src.startswith('http') %}
+                <a href="{{ src }}" target="_blank" rel="noopener noreferrer">{{ src }}</a>{% if not loop.last %} &nbsp;{% endif %}
+              {% else %}
+                <code>{{ src }}</code>{% if not loop.last %} &nbsp;{% endif %}
+              {% endif %}
+            {% endfor %}
+          </p>
           {% endif %}
         </div>
         {% endif %}
